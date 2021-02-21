@@ -3,9 +3,14 @@ An example implementation of a variety of sorting algos for fun in Rust.
 
 
 ## Benchmarking
-Example usage:
+Compiling and generating benchmark files
 ``` sh
-./benchmark
+cd benchmark
+cargo build --release
+./target/release/benchmark
+```
+Benchmarking:
+```
 time cat benchmark-8.txt | ./sort --bubble
 ```
 
