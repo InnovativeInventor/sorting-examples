@@ -1,4 +1,3 @@
-#![feature(rustc_private)]
 extern crate rand;
 use crate::rand::Rng;
 
@@ -17,7 +16,7 @@ fn main() {
         let mut nums = vec![];
 
         for _ in min..max {
-            let n: i64 = rng.gen_range(min, max);
+            let n: i64 = rng.gen_range(min..max);
             nums.push(n);
         }
 
