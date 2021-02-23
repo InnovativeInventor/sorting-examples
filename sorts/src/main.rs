@@ -4,7 +4,7 @@ use std::collections::LinkedList;
 fn main() {
     let input = std::io::stdin();
 
-    let mut sorter = InsertionSortVec::new(usize::pow(10, 6));
+    let mut sorter = InsertionSortVec::new(1000000);
 
     for line in input.lock().lines(){
         let num: i64= line.unwrap().parse().unwrap();
@@ -39,9 +39,10 @@ impl Sort for InsertionSortVec {
             for count in 0..self.list.len() {
                 if &input < &self.list[count] { // invariant holds
                     self.list.insert(count, input);
-                    break
+                    return
                 }
             }
+            self.list.push(input);
         }
     }
 }
