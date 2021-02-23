@@ -1,5 +1,4 @@
 use std::io::BufRead;
-use std::collections::LinkedList;
 
 fn main() {
     let input = std::io::stdin();

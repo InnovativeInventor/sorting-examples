@@ -1,5 +1,5 @@
 [package]
-name = "sorts"
+name = "max-sorts"
 version = "0.1.0"
 authors = ["Max Fan <theinnovativeinventor@gmail.com>"]
 edition = "2018"
