@@ -39,7 +39,7 @@ fn random_partition(arr: &mut [i32],l:usize,h:usize) -> usize{
 
 fn quicksort(arr: &mut [i32],l:usize,h:usize){
     if (l<h){
-        let p = random_partition(arr, l,h);
+        let p = partition(arr, l,h);
         quicksort(arr,l,p-1);
         quicksort(arr,p+1,h);
     }
@@ -146,8 +146,8 @@ fn main(){
     }
 
     let k: usize = vec.len()-1;
-    quicksort(vec.as_mut_slice(), 0, k);
-    //mergesort(vec.as_mut_slice(),0,k);
+    //quicksort(vec.as_mut_slice(), 0, k);
+    mergesort(vec.as_mut_slice(),0,k);
     //heapsort(vec.as_mut_slice(),k);
 
     for things in vec{
