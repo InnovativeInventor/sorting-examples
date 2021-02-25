@@ -23,6 +23,7 @@ fn main() {
     let cap = 1000000;
 
     if opt.insertion {
+        println!("Running insertion sort");
         let mut sorter = InsertionSortVec::new(1000000);
 
         for line in input.lock().lines(){
@@ -34,6 +35,7 @@ fn main() {
             println!("{}", integer)
         }
     } else if opt.merge {
+        println!("Running merge sort");
         let mut sorter = MergeSortVec::new(cap);
 
         for line in input.lock().lines() {
@@ -47,6 +49,7 @@ fn main() {
             println!("{}", integer)
         }
     } else if opt.quicksort {
+        println!("Running quick sort");
         let mut sorter = QuickSortVec::new(cap);
 
         for line in input.lock().lines() {
@@ -60,6 +63,7 @@ fn main() {
             println!("{}", integer)
         }
     } else {
+        println!("Running default sort");
         // Rust's default sort
         let mut sorter = Vec::<i64>::with_capacity(cap);
 
