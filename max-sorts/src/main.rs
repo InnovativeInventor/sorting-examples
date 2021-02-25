@@ -1,32 +1,79 @@
 use std::io::BufRead;
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+#[structopt(name = "max-sorts", about = "An example of several sorting algos.")]
+struct Opt {
+    #[structopt(short, long)]
+    insertion: bool,
+
+    #[structopt(short, long)]
+    merge: bool,
+
+    #[structopt(short, long)]
+    quicksort: bool,
+
+    #[structopt(short, long)]
+    default: bool,
+}
 
 fn main() {
+    let opt = Opt::from_args();
     let input = std::io::stdin();
+    let cap = 1000000;
 
-    // Insertion Sort
-    // let mut sorter = InsertionSortVec::new(1000000);
+    if opt.insertion {
+        let mut sorter = InsertionSortVec::new(1000000);
 
-    // for line in input.lock().lines(){
-    //     let num: i64= line.unwrap().parse().unwrap();
-    //     sorter.insert(num);
-    // }
+        for line in input.lock().lines(){
+            let num: i64= line.unwrap().parse().unwrap();
+            sorter.insert(num);
+        }
 
-    // for integer in &sorter.list {
-    //     println!("{}", integer)
-    // }
+        for integer in &sorter.list {
+            println!("{}", integer)
+        }
+    } else if opt.merge {
+        let mut sorter = MergeSortVec::new(cap);
 
-    // Merge Sort
-    let mut sorter = MergeSortVec::new(1000000);
+        for line in input.lock().lines() {
+            let num: i64 = line.unwrap().parse().unwrap();
+            sorter.insert(num);
+        }
 
-    for line in input.lock().lines() {
-        let num: i64 = line.unwrap().parse().unwrap();
-        sorter.insert(num);
-    }
+        let list = sorter.sort();
 
-    let list = sorter.sort();
+        for integer in list {
+            println!("{}", integer)
+        }
+    } else if opt.quicksort {
+        let mut sorter = QuickSortVec::new(cap);
 
-    for integer in list {
-        println!("{}", integer)
+        for line in input.lock().lines() {
+            let num: i64 = line.unwrap().parse().unwrap();
+            sorter.insert(num);
+        }
+
+        let list = sorter.sort();
+
+        for integer in list {
+            println!("{}", integer)
+        }
+    } else {
+        // Rust's default sort
+        let mut sorter = Vec::<i64>::with_capacity(cap);
+
+        for line in input.lock().lines() {
+            let num: i64 = line.unwrap().parse().unwrap();
+            sorter.push(num);
+        }
+
+        sorter.sort();
+
+        for integer in sorter {
+            println!("{}", integer)
+        }
+
     }
 }
 
@@ -141,4 +188,52 @@ impl Sort for MergeSortVec {
             }
         }
     }
+}
+
+struct QuickSortVec {
+    list: Vec<i64>,
+}
+
+fn quicksort(mut list: Vec<i64>) -> Vec<i64> {
+    if list.len() <= 1 {
+        return list
+    } else {
+        let size = list.len();
+
+        // we choose a random pivot, since the input is sorted
+        let pivot = list[size];
+        let mut start = 0;
+        for i in 0..size {
+            if list[i] < pivot {
+                list.swap(start, i);
+                start += 1;
+            }
+        }
+        list.swap(start, size);
+
+        let mut combined_result = quicksort(list.split_off(start));
+        combined_result.append(&mut quicksort(list));
+        combined_result
+    }
+
+}
+
+impl QuickSortVec {
+    fn sort(self) -> Vec<i64> {
+        quicksort(self.list)
+    }
+}
+
+impl Sort for QuickSortVec {
+    fn new(cap: usize) -> Self {
+        Self {
+            list: Vec::<i64>::with_capacity(cap),
+        }
+    }
+
+    fn insert(&mut self, input: i64) {
+        self.list.push(input);
+    }
+
+
 }
