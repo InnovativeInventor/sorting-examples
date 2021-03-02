@@ -1,7 +1,12 @@
 cd aiyu-sorts
 cargo build --release -q
 echo "Aiyu benchmarks:"
-time cat ../benchmark/benchmark-5.txt | ./target/release/aiyu-sorts > /dev/null
+echo "Aiyu -- quicksort"
+time cat ../benchmark/benchmark-5.txt | ./target/release/aiyu-sorts -q > /dev/null
+echo "Aiyu -- mergesort"
+time cat ../benchmark/benchmark-5.txt | ./target/release/aiyu-sorts -m > /dev/null
+echo "Max -- heapsort"
+time cat ../benchmark/benchmark-5.txt | ./target/release/aiyu-sorts -h > /dev/null
 
 cd ..
 echo
