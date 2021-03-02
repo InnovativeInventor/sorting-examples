@@ -23,7 +23,7 @@ fn main() {
     let cap = 1000000;
 
     if opt.insertion {
-        println!("Running insertion sort");
+        // println!("Running insertion sort");
         let mut sorter = InsertionSortVec::new(1000000);
 
         for line in input.lock().lines(){
@@ -35,7 +35,7 @@ fn main() {
             println!("{}", integer)
         }
     } else if opt.merge {
-        println!("Running merge sort");
+        // println!("Running merge sort");
         let mut sorter = MergeSortVec::new(cap);
 
         for line in input.lock().lines() {
@@ -47,7 +47,7 @@ fn main() {
             println!("{}", integer)
         }
     } else if opt.quicksort {
-        println!("Running quick sort");
+        // println!("Running quick sort");
         let mut sorter = QuickSortVec::new(cap);
 
         for line in input.lock().lines() {
@@ -59,7 +59,7 @@ fn main() {
             println!("{}", integer)
         }
     } else {
-        println!("Running default sort");
+        // println!("Running default sort");
         // Rust's default sort
         let mut sorter = Vec::<i64>::with_capacity(cap);
 
@@ -112,7 +112,7 @@ struct MergeSortVec {
     list: Vec<Vec<i64>>,
 }
 
-fn merge(mut a: Vec<i64>, mut b: Vec<i64>) -> Vec<i64> {
+fn merge(a: Vec<i64>, b: Vec<i64>) -> Vec<i64> {
     if a.len() == 0 {
         return b
     } else if b.len() == 0 {
@@ -213,7 +213,6 @@ fn partition(mut list: Vec<i64>, low: usize, high: usize) -> (Vec<i64>, usize) {
 
 impl QuickSortVec {
     fn sort(self) -> Vec<i64> {
-        println!("Len: {}", self.list.len() - 1);
         // let length = (self.list.len() - 1) % self.list.len();
         let length = self.list.len()-1;
         quicksort(self.list, 0, length)
