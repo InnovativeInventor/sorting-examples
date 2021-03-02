@@ -3,9 +3,26 @@
 //use rand::Rng;
 
 use std::fs::File;
-use std::io::{BufRead, BufReader, Error, ErrorKind, Read, Result,Lines};
-use std::path::{Path, PathBuf};
+use std::io::{BufRead, BufReader, Result,Lines};
+use std::path::Path;
 
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+#[structopt(name = "aiyu-sorts", about = "quicksort, mergesort, and heapsort")]
+struct Opt {
+    #[structopt(short, long)]
+    heapsort: bool,
+
+    #[structopt(short, long)]
+    mergesort: bool,
+
+    #[structopt(short, long)]
+    quicksort: bool,
+
+    #[structopt(short, long)]
+    default: bool,
+}
 
 fn swap(arr: &mut[i32], a:usize, b:usize){
     let par = arr[a];
@@ -132,6 +149,7 @@ fn read_lines<P>(filename: P) -> Result<Lines<BufReader<File>>>
 }
 
 fn main(){
+    let opt = Opt::from_args();
     let mut vec = Vec::new();
     let input = std::io::stdin();
 
@@ -154,9 +172,18 @@ fn main(){
     }
 
     let k: usize = vec.len()-1;
-    quicksort(vec.as_mut_slice(), 0, k);
-    //mergesort(vec.as_mut_slice(),0,k);
-    //heapsort(vec.as_mut_slice(),k+1);
+    if opt.quicksort{
+        //println!("Q");
+        quicksort(vec.as_mut_slice(), 0, k);
+    }else if opt.mergesort{
+        //println!("M");
+        mergesort(vec.as_mut_slice(),0,k);
+    }else if opt.heapsort{
+        //println!("H");
+        heapsort(vec.as_mut_slice(),k+1);
+    }else{
+        quicksort(vec.as_mut_slice(), 0, k);
+    }
 
     for things in vec{
         println!("{}",things);
