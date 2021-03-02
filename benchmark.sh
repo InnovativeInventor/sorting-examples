@@ -18,8 +18,6 @@ time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -i > /dev/nul
 echo "Max -- mergesort"
 time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -m > /dev/null
 
-cd ..
-
 echo "Default sorting algo in Linux:"
 time cat ../benchmark/benchmark-5.txt | sort -g > /dev/null
 
