@@ -112,7 +112,7 @@ struct MergeSortVec {
     list: Vec<Vec<i64>>,
 }
 
-fn merge(mut a: Vec<i64>, mut b: Vec<i64>) -> Vec<i64> {
+fn merge(a: Vec<i64>, b: Vec<i64>) -> Vec<i64> {
     if a.len() == 0 {
         return b
     } else if b.len() == 0 {
