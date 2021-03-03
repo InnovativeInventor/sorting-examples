@@ -17,12 +17,23 @@ echo "Max benchmarks:"
 echo "Max -- default"
 time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -d > /dev/null
 echo "Max -- quicksort"
-time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -q > /dev/null
+time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -q | shasum
 echo "Max -- insert"
-time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -i > /dev/null
+time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -i | shasum
 echo "Max -- mergesort"
-time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -m > /dev/null
+time cat ../benchmark/benchmark-5.txt | ./target/release/max-sorts -m | shasum
+
+cd ..
+echo
+
+cd spencer-sorts
+cargo build --release -q
+echo "Spencer Benchmarks"
+echo "Spencer -- Insertion"
+time cat ../benchmark/benchmark-5.txt | ./target/release/spencer-sorts -i | shasum
+echo "Spencer -- Quick"
+time cat ../benchmark/benchmark-5.txt | ./target/release/spencer-sorts -q | shasum
 
 echo "Default sorting algo in Linux:"
-time cat ../benchmark/benchmark-5.txt | sort -g > /dev/null
+time cat ../benchmark/benchmark-5.txt | sort -g | shasum
 
