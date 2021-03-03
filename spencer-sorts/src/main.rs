@@ -1,5 +1,6 @@
 use std::io::BufRead;
 use structopt::StructOpt;
+use rayon::prelude::*;
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "spencer-sorts", about = "A potpourri of sorting algorithms")]
@@ -18,6 +19,9 @@ struct Opt {
 
     #[structopt(short, long)]
     transposition: bool,
+
+    #[structopt(short, long)]
+    xtreme: bool,
 
     #[structopt(short, long)]  // enables parallel processing on eligible algorithms
     parallel: bool,
@@ -74,6 +78,17 @@ fn main() {
         }
     } else if opt.transposition {
         let mut sorter = TranspositionSortVector::new(cap);
+
+        for line in input.lock().lines(){
+            let num: i64 = line.unwrap().parse().unwrap();
+            sorter.insert(num);
+        }
+
+        for integer in sorter.sort() {
+            println!("{}", integer);
+        }
+    } else if opt.xtreme {
+        let mut sorter = XtremeSortVector::new(cap);
 
         for line in input.lock().lines(){
             let num: i64 = line.unwrap().parse().unwrap();
@@ -325,4 +340,33 @@ fn transposition_sort(mut arr: Vec<i64>) -> Vec<i64> {
         }
     }
     arr
+}
+
+// ======================================================
+// Xtreme (Rayon Parallel) Sort --
+// Unstable, parallel sorting
+// ======================================================
+
+struct XtremeSortVector {
+    list: Vec<i64>,
+}
+
+impl Sortable for XtremeSortVector {
+    fn new(cap: usize) -> Self {
+        Self {
+            list: Vec::<i64>::with_capacity(cap),
+        }
+    }
+
+    fn insert(&mut self, input: i64) {
+        self.list.push(input);
+    }
+}
+
+impl XtremeSortVector {
+    fn sort(mut self) -> Vec<i64> {
+        self.list.par_iter_mut();
+        self.list.par_sort_unstable();
+        self.list
+    }
 }
