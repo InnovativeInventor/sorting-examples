@@ -280,7 +280,8 @@ fn bubble_sort(mut arr: Vec<i64>) -> Vec<i64> {
 // Transposition Sort --
 // Switches incorrect adjacent elements until list is sorted,
 // But skips over every other pair on each pass
-// It does this so parallelism can be implemented
+// It does this so information per access is increased
+// because and parallelism can be implemented
 // ======================================================
 
 struct TranspositionSortVector {
