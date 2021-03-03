@@ -15,6 +15,12 @@ struct Opt {
 
     #[structopt(short, long)]
     bubble: bool,
+
+    #[structopt(short, long)]
+    transposition: bool,
+
+    #[structopt(short, long)]  // enables parallel processing on eligible algorithms
+    parallel: bool,
 }
 
 fn main() {
@@ -66,6 +72,17 @@ fn main() {
         for integer in sorter.sort() {
             println!("{}", integer);
         }
+    } else if opt.transposition {
+        let mut sorter = TranspositionSortVector::new(cap);
+
+        for line in input.lock().lines(){
+            let num: i64 = line.unwrap().parse().unwrap();
+            sorter.insert(num);
+        }
+
+        for integer in sorter.sort() {
+            println!("{}", integer);
+        }
     }
 }
 
@@ -73,6 +90,14 @@ trait Sortable {
     fn new(cap: usize) -> Self;
     fn insert(&mut self, input: i64);
 }
+
+// ======================================================
+// Insertion Sort --
+// Partitions list into a sorted and unsorted section
+// Takes individual elements from unsorted list
+// Places them into the correct place in sorted portion
+// Repeats until unsorted list has no elements
+// ======================================================
 
 struct InsertionSortVector {
     list: Vec<i64>,
@@ -95,6 +120,12 @@ impl Sortable for InsertionSortVector {
         self.list.push(input);
     }
 }
+
+// ======================================================
+// Quick Sort -- Selects element to pivot
+// Partitions list into items greater than pivot and less than pivot
+// Repeats recursively on the two sub-lists
+// ======================================================
 
 struct QuickSortVector {
     list: Vec<i64>,
@@ -149,6 +180,12 @@ fn partition(mut arr: Vec<i64>, start: i64, end: i64) -> (Vec<i64>, i64) {
     (arr, i)
 }
 
+// ======================================================
+// Base-10 Radix Sort --
+// Sorts elements into bins corresponding to least significant digit
+// Repeats for each digit by order of reverse significance
+// ======================================================
+
 struct RadixSortVector {
     list: Vec<i64>,
 }
@@ -197,6 +234,11 @@ fn radix_sort(mut arr: Vec<i64>) -> Vec<i64>{
     arr
 }
 
+// ======================================================
+// Bubble Sort --
+// Switches incorrect adjacent elements until list is sorted
+// ======================================================
+
 struct BubbleSortVector {
     list: Vec<i64>,
 }
@@ -225,6 +267,56 @@ fn bubble_sort(mut arr: Vec<i64>) -> Vec<i64> {
     while !sorted {
         sorted = true;
         for i in 0..length-1 {
+            if arr[i] > arr[i+1] {
+                sorted = false;
+                arr.swap(i, i+1)
+            }
+        }
+    }
+    arr
+}
+
+// ======================================================
+// Transposition Sort --
+// Switches incorrect adjacent elements until list is sorted,
+// But skips over every other pair on each pass
+// It does this so parallelism can be implemented
+// ======================================================
+
+struct TranspositionSortVector {
+    list: Vec<i64>,
+}
+
+impl Sortable for TranspositionSortVector {
+    fn new(cap: usize) -> Self {
+        Self {
+            list: Vec::<i64>::with_capacity(cap),
+        }
+    }
+
+    fn insert(&mut self, input: i64) {
+        self.list.push(input);
+    }
+}
+
+impl TranspositionSortVector {
+    fn sort(self) -> Vec<i64> {
+        transposition_sort(self.list)
+    }
+}
+
+fn transposition_sort(mut arr: Vec<i64>) -> Vec<i64> {
+    let length = arr.len();
+    let mut sorted = false;
+    while !sorted {
+        sorted = true;
+        for i in (0..length-1).step_by(2) {
+            if arr[i] > arr[i+1] {
+                sorted = false;
+                arr.swap(i, i+1)
+            }
+        }
+        for i in (1..length-1).step_by(2) {
             if arr[i] > arr[i+1] {
                 sorted = false;
                 arr.swap(i, i+1)
