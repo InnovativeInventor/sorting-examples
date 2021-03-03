@@ -35,6 +35,8 @@ echo "Spencer -- Quick"
 time cat ../benchmark/benchmark-5.txt | ./target/release/spencer-sorts -q | shasum
 echo "Spencer -- Radix"
 time cat ../benchmark/benchmark-5.txt | ./target/release/spencer-sorts -r | shasum
+echo "Spencer -- Bubble"
+time cat ../benchmark/benchmark-5.txt | ./target/release/spencer-sorts -b | shasum
 
 echo "Default sorting algo in Linux:"
 time cat ../benchmark/benchmark-5.txt | sort -g | shasum

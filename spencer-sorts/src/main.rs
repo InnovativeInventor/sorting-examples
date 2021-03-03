@@ -12,6 +12,9 @@ struct Opt {
 
     #[structopt(short, long)]
     radix: bool,
+
+    #[structopt(short, long)]
+    bubble: bool,
 }
 
 fn main() {
@@ -43,6 +46,17 @@ fn main() {
         }
     } else if opt.radix {
         let mut sorter = RadixSortVector::new(cap);
+
+        for line in input.lock().lines(){
+            let num: i64 = line.unwrap().parse().unwrap();
+            sorter.insert(num);
+        }
+
+        for integer in sorter.sort() {
+            println!("{}", integer);
+        }
+    } else if opt.bubble {
+        let mut sorter = BubbleSortVector::new(cap);
 
         for line in input.lock().lines(){
             let num: i64 = line.unwrap().parse().unwrap();
@@ -178,6 +192,43 @@ fn radix_sort(mut arr: Vec<i64>) -> Vec<i64>{
         }
         for j in 0..length as i32 {  // puts ans numbers back into arr
             arr[j as usize] = ans[j as usize]
+        }
+    }
+    arr
+}
+
+struct BubbleSortVector {
+    list: Vec<i64>,
+}
+
+impl Sortable for BubbleSortVector {
+    fn new(cap: usize) -> Self {
+        Self {
+            list: Vec::<i64>::with_capacity(cap),
+        }
+    }
+
+    fn insert(&mut self, input: i64) {
+        self.list.push(input);
+    }
+}
+
+impl BubbleSortVector {
+    fn sort(self) -> Vec<i64> {
+        bubble_sort(self.list)
+    }
+}
+
+fn bubble_sort(mut arr: Vec<i64>) -> Vec<i64> {
+    let length = arr.len();
+    let mut sorted = false;
+    while !sorted {
+        sorted = true;
+        for i in 0..length-1 {
+            if arr[i] > arr[i+1] {
+                sorted = false;
+                arr.swap(i, i+1)
+            }
         }
     }
     arr
