@@ -20,7 +20,7 @@ struct Opt {
 fn main() {
     let opt = Opt::from_args();
     let input = std::io::stdin();
-    let cap = 1000000;
+    let cap = 10000000;
 
     if opt.insertion {
         // println!("Running insertion sort");
@@ -140,14 +140,6 @@ fn merge(a: Vec<i64>, b: Vec<i64>) -> Vec<i64> {
         }
     }
 
-    // if i == a.len() && j != b.len() {
-    //     merged.extend_from_slice(&b.split_off(j));
-    // }
-
-    // if j == b.len() && i != a.len() {
-    //     merged.extend_from_slice(&a.split_off(i));
-    // }
-
     merged
 }
 
@@ -189,8 +181,10 @@ struct QuickSortVec {
 fn quicksort(list: Vec<i64>, low: usize, high: usize) -> Vec<i64> {
     if low < high {
         let (mut list, pivot_loc) = partition(list, low, high);
-        list = quicksort(list, low, pivot_loc - 1);
-        list = quicksort(list, pivot_loc + 1, high);
+        if pivot_loc > 0 {
+            list = quicksort(list, low, pivot_loc - 1);
+            list = quicksort(list, pivot_loc + 1, high);
+        }
         list
     } else {
         list
@@ -213,7 +207,6 @@ fn partition(mut list: Vec<i64>, low: usize, high: usize) -> (Vec<i64>, usize) {
 
 impl QuickSortVec {
     fn sort(self) -> Vec<i64> {
-        // let length = (self.list.len() - 1) % self.list.len();
         let length = self.list.len()-1;
         quicksort(self.list, 0, length)
     }
@@ -229,6 +222,4 @@ impl Sort for QuickSortVec {
     fn insert(&mut self, input: i64) {
         self.list.push(input);
     }
-
-
 }
