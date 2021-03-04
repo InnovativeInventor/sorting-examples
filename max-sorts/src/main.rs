@@ -184,6 +184,8 @@ fn quicksort(list: Vec<i64>, low: usize, high: usize) -> Vec<i64> {
         if pivot_loc > 0 {
             list = quicksort(list, low, pivot_loc - 1);
             list = quicksort(list, pivot_loc + 1, high);
+        } else {
+            list = quicksort(list, pivot_loc + 1, high);
         }
         list
     } else {
