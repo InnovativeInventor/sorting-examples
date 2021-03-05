@@ -11,7 +11,12 @@ cargo build --release
 ```
 Benchmarking:
 ```sh
-time cat benchmark-8.txt | ./sort --bubble
+bash benchmark.sh
+```
+
+Testing:
+```sh
+bash tests.sh
 ```
 
 Checksums:
